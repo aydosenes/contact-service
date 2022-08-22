@@ -1,4 +1,7 @@
 ﻿using Application.Dtos;
+using Application.Features.Queries.ContactQueries;
+using Application.Features.Request.Commands.ContactCommands;
+using Application.Features.Request.Queries.ContactQueries;
 using Application.Results;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -19,31 +22,31 @@ namespace WebAPI.Controllers
         {
             _mediator = mediator;
         }
-        [HttpGet("test/{id}")]
+        [HttpGet("contact/{id}")]
         [ProducesResponseType(200, Type = typeof(IDataResult<List<ContactDto>>))]
         public async Task<IActionResult> TestById(string id)
         {
-            var result = await _mediator.Send(new GetTestByIdQuery() { Id = id });
+            var result = await _mediator.Send(new GetContactByIdQuery() { Id = id });
             if (result.Success)
                 return Ok(result.Data);
             return BadRequest(result.Message);
 
         }
 
-        [HttpGet("test-list")]
+        [HttpGet("contact-list")]
         [ProducesResponseType(200, Type = typeof(IDataResult<List<ContactDto>>))]
         public async Task<IActionResult> TestList()
         {
-            var result = await _mediator.Send(new GetTestListQuery());
+            var result = await _mediator.Send(new GetContactListQuery());
             if (result.Success)
                 return Ok(result.Data);
             return BadRequest(result.Message);
 
         }
 
-        [HttpPost("add-test")]
+        [HttpPost("add-contact")]
         [ProducesResponseType(200, Type = typeof(BaseResult))]
-        public async Task<IActionResult> AddTest(AddTestCommand request)
+        public async Task<IActionResult> AddTest(AddContactCommand request)
         {
             var result = await _mediator.Send(request);
             if (result.Success)
@@ -51,9 +54,9 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPut("update-test")]
+        [HttpPut("update-contact")]
         [ProducesResponseType(200, Type = typeof(BaseResult))]
-        public async Task<IActionResult> UpdateTest(UpdateTestCommand request)
+        public async Task<IActionResult> UpdateTest(UpdateContactCommand request)
         {
             var result = await _mediator.Send(request);
             if (result.Success)
@@ -62,9 +65,9 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpDelete("delete-test")]
+        [HttpDelete("delete-contact")]
         [ProducesResponseType(200, Type = typeof(BaseResult))]
-        public async Task<IActionResult> DeleteTest(DeleteTestCommand request)
+        public async Task<IActionResult> DeleteTest(DeleteContactCommand request)
         {
             var result = await _mediator.Send(request);
             if (result.Success)

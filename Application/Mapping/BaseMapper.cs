@@ -1,5 +1,6 @@
 ﻿using Application.Dtos;
 using Application.Features.Request.Commands;
+using Application.Features.Request.Commands.ContactCommands;
 using AutoMapper;
 using Domain.Entities;
 using System;
@@ -12,13 +13,13 @@ namespace Application.Mapping
     {
         public BaseMapper()
         {
-            CreateMap<Test, TestDto>().ReverseMap();
+            CreateMap<Contact, ContactDto>().ReverseMap();
 
-            CreateMap<Test, AddTestCommand>().ReverseMap();
+            CreateMap<Contact, AddContactCommand>().ReverseMap();
 
-            CreateMap<Test, DeleteTestCommand>().ReverseMap();
+            CreateMap<Contact, DeleteContactCommand>().ReverseMap();
 
-            CreateMap<Test, UpdateTestCommand>().ReverseMap();
+            CreateMap<Contact, UpdateContactCommand>().ReverseMap();
 
         }
     }

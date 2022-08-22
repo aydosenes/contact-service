@@ -16,7 +16,6 @@ namespace Persistence.Context
 
         }
 
-        public virtual DbSet<Test> Tests { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -27,7 +26,7 @@ namespace Persistence.Context
 
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new TestMapping());
+            //modelBuilder.ApplyConfiguration(new TestMapping());
 
             foreach (var relationship in modelBuilder.Model.GetEntityTypes()
             .Where(e => !e.IsOwned())

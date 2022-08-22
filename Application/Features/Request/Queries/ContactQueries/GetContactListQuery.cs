@@ -5,10 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Application.Features.Request.Queries
+namespace Application.Features.Queries.ContactQueries
 {
-    public class GetTestByIdQuery : IRequest<IDataResult<TestDto>>
+    public class GetContactListQuery : IRequest<IDataResult<List<ContactDto>>>
     {
-        public string Id { get; set; }
     }
 }

@@ -34,7 +34,6 @@ namespace WebAPI
                 return option.GetRequiredService<IOptions<DbSetting>>().Value;
             });
 
-            services.AddScoped<ITestRepository, TestRepository>();
             services.AddScoped<IContactRepository, ContactRepository>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
