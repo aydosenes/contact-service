@@ -35,6 +35,7 @@ namespace WebAPI
             });
 
             services.AddScoped<ITestRepository, TestRepository>();
+            services.AddScoped<IContactRepository, ContactRepository>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
