@@ -1,11 +1,10 @@
 ## Info
 
-This is an API template for Jobs Management that must work on background or scheduled.
+This is an API template for Contact Management.
 
 ## Prerequisites
 
-.Net Core 3.1, SQL Server, SQL Server Management Studio, Visual Studio
-Hangfire, Mediatr, EntityFramework Core, Automapper
+.Net Core 3.1, MongoDB, CQRS(Mediatr)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
