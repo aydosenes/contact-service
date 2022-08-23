@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using Persistence.DbContexTools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +13,10 @@ using System.Threading.Tasks;
 
 namespace Persistence.Repositories
 {
-    public abstract class BaseMongoRepository<T> : IBaseMongoRepository<T> where T : BaseEntity, new()
+    public abstract class BaseMongoRepository<T> : BaseRepository<T>, IBaseMongoRepository<T> where T : BaseEntity, new()
     {
-        protected readonly IMongoCollection<T> _collection;
-        private readonly DbSetting _settings;
-        protected BaseMongoRepository(IOptions<DbSetting> dbSetting, string collectionName)
+        protected BaseMongoRepository(string connectionString, string databaseName, string collectionName) : base(connectionString, databaseName, collectionName)
         {
-            _settings = dbSetting.Value;
-            var client = new MongoClient(_settings.ConnectionString);
-            var db = client.GetDatabase(_settings.DatabaseName);
-            _collection = db.GetCollection<T>(collectionName);
         }
 
         public virtual async Task<ICollection<T>> GetListAsync()
@@ -57,13 +50,13 @@ namespace Persistence.Repositories
 
         public virtual async Task<T> GetAsync(Expression<Func<T, bool>> where)
         {
-            return (T)await _collection.FindAsync(where);            
+            return await _collection.Find(where).FirstOrDefaultAsync();
         }
 
         public virtual async Task<T> GetByIdAsync(string id)
         {
             var filter = Builders<T>.Filter.Where(s => s.Id.Equals(id) && s.IsDeleted == false);
-            return (T)await _collection.FindAsync(filter);
+            return await _collection.Find(filter).FirstOrDefaultAsync();
         }    
 
         public virtual async Task UpdateAsync(T entity)

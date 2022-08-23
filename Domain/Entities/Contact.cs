@@ -2,6 +2,7 @@
 using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 
 namespace Domain.Entities
 {
@@ -13,8 +14,6 @@ namespace Domain.Entities
         public string Company { get; set; }
 
         [BsonRepresentation(BsonType.ObjectId)]
-        public string ContactDetailId { get; set; }
-        [BsonIgnore]
-        public ContactDetail ContactDetail { get; set; }
+        public ICollection<string> ContactDetailIdList { get; set; }
     }
 }

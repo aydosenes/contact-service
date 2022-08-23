@@ -1,16 +1,13 @@
-using Application.Interfaces.Repository;
+using Application.Mapping;
 using Application.Middlewares;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using Persistence.DbContexTools;
-using Persistence.Repositories;
 using System;
 
 namespace WebAPI
@@ -26,14 +23,14 @@ namespace WebAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IContactRepository, ContactRepository>();
-            services.AddMongoDbSettings(Configuration);
+            //services.AddScoped<IContactRepository, ContactRepository>();
+            //services.AddMongoDbSettings(Configuration);
             //services.Configure<DbSetting>(Configuration.GetSection("DbSettings"));
             //services.AddSingleton<IDbSetting>(option =>
             //{
             //    return option.GetRequiredService<IOptions<DbSetting>>().Value;
             //});
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper(typeof(BaseMapper));
             services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
             services.AddSwaggerGen(c =>

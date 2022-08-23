@@ -1,6 +1,8 @@
 ﻿using Application.Dtos;
 using Application.Features.Queries.ContactQueries;
 using Application.Features.Request.Commands.ContactCommands;
+using Application.Features.Request.Commands.ContactDetailCommands;
+using Application.Features.Request.Queries.ContactDetailQueries;
 using Application.Features.Request.Queries.ContactQueries;
 using Application.Results;
 using MediatR;
@@ -15,38 +17,38 @@ namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ContactController : ControllerBase
+    public class ContactDetailController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public ContactController(IMediator mediator)
+        public ContactDetailController(IMediator mediator)
         {
             _mediator = mediator;
         }
-        [HttpGet("contact/{id}")]
-        [ProducesResponseType(200, Type = typeof(IDataResult<List<ContactDto>>))]
-        public async Task<IActionResult> ContactById(string id)
+        [HttpGet("contact-detail/{id}")]
+        [ProducesResponseType(200, Type = typeof(IDataResult<List<ContactDetailDto>>))]
+        public async Task<IActionResult> ContactDetailById(string id)
         {
-            var result = await _mediator.Send(new GetContactByIdQuery() { Id = id });
+            var result = await _mediator.Send(new GetContactDetailByIdQuery() { Id = id });
             if (result.Success)
                 return Ok(result.Data);
             return BadRequest(result.Message);
 
         }
 
-        [HttpGet("contact-list")]
-        [ProducesResponseType(200, Type = typeof(IDataResult<List<ContactDto>>))]
-        public async Task<IActionResult> ContactList()
+        [HttpGet("contact-detail-list")]
+        [ProducesResponseType(200, Type = typeof(IDataResult<List<ContactDetailDto>>))]
+        public async Task<IActionResult> ContactDetailList()
         {
-            var result = await _mediator.Send(new GetContactListQuery());
+            var result = await _mediator.Send(new GetContactDetailListQuery());
             if (result.Success)
                 return Ok(result.Data);
             return BadRequest(result.Message);
 
         }
 
-        [HttpPost("add-contact")]
+        [HttpPost("add-contact-detail")]
         [ProducesResponseType(200, Type = typeof(BaseResult))]
-        public async Task<IActionResult> AddContact([FromBody] AddContactCommand request)
+        public async Task<IActionResult> AddContactDetail([FromBody] AddContactDetailCommand request)
         {
             var result = await _mediator.Send(request);
             if (result.Success)
@@ -54,9 +56,9 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPut("update-contact")]
+        [HttpPut("update-contact-detail")]
         [ProducesResponseType(200, Type = typeof(BaseResult))]
-        public async Task<IActionResult> UpdateContact([FromBody] UpdateContactCommand request)
+        public async Task<IActionResult> UpdateContactDetail([FromBody] UpdateContactDetailCommand request)
         {
             var result = await _mediator.Send(request);
             if (result.Success)
@@ -65,15 +67,16 @@ namespace WebAPI.Controllers
         }
 
 
-        [HttpDelete("delete-contact")]
+        [HttpDelete("delete-contact-detail")]
         [ProducesResponseType(200, Type = typeof(BaseResult))]
-        public async Task<IActionResult> DeleteContact([FromBody] DeleteContactCommand request)
+        public async Task<IActionResult> DeleteContactDetail([FromBody] DeleteContactDetailCommand request)
         {
             var result = await _mediator.Send(request);
             if (result.Success)
                 return Ok(result);
             return BadRequest(result.Message);
         }
+
 
     }
 }

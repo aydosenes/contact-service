@@ -1,4 +1,5 @@
-﻿using Application.Results;
+﻿using Application.Dtos;
+using Application.Results;
 using Domain.Entities;
 using MediatR;
 using System;
@@ -7,7 +8,8 @@ using System.Text;
 
 namespace Application.Features.Request.Commands.ContactCommands
 {
-    public class UpdateContactCommand : IRequest<IDataResult<Contact>>
+    public class UpdateContactCommand : IRequest<IDataResult<ContactDto>>
     {
+        public ContactDto Contact { get; set; }
     }
 }

@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Features.Handlers
+namespace Application.Features.Handlers.Queries.ContactHandlers
 {
     public class GetContactListQueryHandler : IRequestHandler<GetContactListQuery, IDataResult<List<ContactDto>>>
     {
