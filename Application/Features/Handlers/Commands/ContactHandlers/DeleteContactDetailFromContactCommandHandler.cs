@@ -11,11 +11,11 @@ using Application.Features.Request.Commands.ContactCommands;
 
 namespace Application.Features.Handlers.Commands.ContactHandlers
 {
-    public class AddContactDetailToContactCommandHandler : IRequestHandler<AddContactDetailToContactCommand, IDataResult<Contact>>
+    public class DeleteContactDetailFromContactCommandHandler : IRequestHandler<AddContactDetailToContactCommand, IDataResult<Contact>>
     {
         private readonly IContactRepository _contactRepository;
         private readonly IMapper _mapper;
-        public AddContactDetailToContactCommandHandler(IContactRepository contactRepository, IMapper mapper)
+        public DeleteContactDetailFromContactCommandHandler(IContactRepository contactRepository, IMapper mapper)
         {
             _contactRepository = contactRepository;
             _mapper = mapper;
@@ -25,9 +25,9 @@ namespace Application.Features.Handlers.Commands.ContactHandlers
             try
             {
                 var contact = await _contactRepository.GetByIdAsync(request.ContactIdAndContactDetailIdPairDto.ContactId);
-                contact.ContactDetailIdList.Add(request.ContactIdAndContactDetailIdPairDto.ContactDetailId);
+                contact.ContactDetailIdList.Remove(request.ContactIdAndContactDetailIdPairDto.ContactDetailId);
                 var result = await _contactRepository.UpdateAsync(contact);
-                return new SuccessDataResult<Contact>(result, Messages.Success_Added);
+                return new SuccessDataResult<Contact>(result, Messages.Success_Deleted);
 
             }
             catch (Exception ex)

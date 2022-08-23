@@ -13,10 +13,10 @@ namespace Application.Interfaces.Repository
         Task<T> GetByIdAsync(string id);
         Task<ICollection<T>> GetListAsync();
         Task<T> AddAsync(T entity);
-        Task AddRangeAsync(ICollection<T> entities);
-        Task UpdateAsync(T entity);
-        Task UpdateRangeAsync(ICollection<T> entities);
-        Task DeleteAsync(T entity);
-        Task DeleteRangeAsync(ICollection<T> entities);
+        Task<ICollection<T>> AddRangeAsync(ICollection<T> entities);
+        Task<T> UpdateAsync(T entity);
+        Task<ICollection<T>> UpdateRangeAsync(ICollection<T> entities);
+        Task<T> DeleteAsync(T entity);
+        Task<ICollection<T>> DeleteRangeAsync(ICollection<T> entities);
     }
 }

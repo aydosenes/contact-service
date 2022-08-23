@@ -11,7 +11,7 @@ using Application.Features.Request.Commands.ContactDetailCommands;
 
 namespace Application.Features.Handlers.Commands.ContactDetailHandlers
 {
-    public class AddContactDetailCommandHandler : IRequestHandler<AddContactDetailCommand, IDataResult<ContactDetailDto>>
+    public class AddContactDetailCommandHandler : IRequestHandler<AddContactDetailCommand, IDataResult<ContactDetail>>
     {
         private readonly IContactDetailRepository _contactDetailRepository;
         private readonly IMapper _mapper;
@@ -20,18 +20,18 @@ namespace Application.Features.Handlers.Commands.ContactDetailHandlers
             _contactDetailRepository = contactRepository;
             _mapper = mapper;
         }
-        public async Task<IDataResult<ContactDetailDto>> Handle(AddContactDetailCommand request, CancellationToken cancellationToken)
+        public async Task<IDataResult<ContactDetail>> Handle(AddContactDetailCommand request, CancellationToken cancellationToken)
         {
             try
             {
                 var mapped = _mapper.Map<ContactDetail>(request.ContactDetail);
-                await _contactDetailRepository.AddAsync(mapped);
-                return new SuccessDataResult<ContactDetailDto>(request.ContactDetail, Messages.Success_Added);
+                var result = await _contactDetailRepository.AddAsync(mapped);
+                return new SuccessDataResult<ContactDetail>(result, Messages.Success_Added);
 
             }
             catch (Exception ex)
             {
-                return new ErrorDataResult<ContactDetailDto>(request.ContactDetail, ex.Message);
+                return new ErrorDataResult<ContactDetail>(ex.Message);
             }
         }
     }

@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Application.Features.Request.Commands.ContactCommands
 {
-    public class DeleteContactCommand : IRequest<IDataResult<ContactDto>>
+    public class DeleteContactCommand : IRequest<IDataResult<Contact>>
     {
         public ContactDto Contact { get; set; }
     }

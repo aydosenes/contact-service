@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Application.Features.Request.Commands.ContactCommands
 {
-    public class AddContactCommand : IRequest<IDataResult<ContactDto>>
+    public class AddContactCommand : IRequest<IDataResult<Contact>>
     {
         public ContactDto Contact { get; set; }
     }

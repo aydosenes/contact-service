@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Application.Dtos
 {
-    public class ContactDetailToContactDto
+    public class ContactIdAndContactDetailIdPairDto
     {
         [BsonRepresentation(BsonType.ObjectId)]
         public string ContactId { get; set; }

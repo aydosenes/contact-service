@@ -30,23 +30,26 @@ namespace Persistence.Repositories
             return entity;
         }
 
-        public virtual async Task AddRangeAsync(ICollection<T> entities)
+        public virtual async Task<ICollection<T>> AddRangeAsync(ICollection<T> entities)
         {
             await _collection.InsertManyAsync(entities);
+            return entities;
         }
 
-        public virtual async Task DeleteAsync(T entity)
+        public virtual async Task<T> DeleteAsync(T entity)
         {
             var filter = Builders<T>.Filter.Where(s => s.Id.Equals(entity.Id) && s.IsDeleted == false);
             var update = Builders<T>.Update.Set("IsDeleted", "true");
             await _collection.UpdateOneAsync(filter, update);
+            return entity;
         }
 
-        public virtual async Task DeleteRangeAsync(ICollection<T> entities)
+        public virtual async Task<ICollection<T>> DeleteRangeAsync(ICollection<T> entities)
         {
             var filter = Builders<T>.Filter.Where(s => entities.Contains(s) && s.IsDeleted == false);
             var update = Builders<T>.Update.Set("IsDeleted", "true");
             await _collection.UpdateManyAsync(filter, update);
+            return entities;
         }
 
         public virtual async Task<T> GetAsync(Expression<Func<T, bool>> where)
@@ -60,12 +63,13 @@ namespace Persistence.Repositories
             return await _collection.Find(filter).FirstOrDefaultAsync();
         }    
 
-        public virtual async Task UpdateAsync(T entity)
+        public virtual async Task<T> UpdateAsync(T entity)
         {
             await _collection.ReplaceOneAsync(s=>s.Id == entity.Id, entity);
+            return entity;
         }
 
-        public virtual async Task UpdateRangeAsync(ICollection<T> entities)
+        public virtual async Task<ICollection<T>> UpdateRangeAsync(ICollection<T> entities)
         {
             var requests = entities.Select(replacement => new ReplaceOneModel<T>(
                 filter: new ExpressionFilterDefinition<T>(s => s.Id == replacement.Id),
@@ -75,6 +79,8 @@ namespace Persistence.Repositories
                 .BulkWriteAsync(
                     requests: requests,
                     options: new BulkWriteOptions { IsOrdered = false });
+
+            return entities;
         }
     }
 }

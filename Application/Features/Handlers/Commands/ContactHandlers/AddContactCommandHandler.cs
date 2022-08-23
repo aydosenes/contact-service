@@ -12,7 +12,7 @@ using Application.Dtos;
 
 namespace Application.Features.Handlers.Commands.ContactHandlers
 {
-    public class AddContactCommandHandler : IRequestHandler<AddContactCommand, IDataResult<ContactDto>>
+    public class AddContactCommandHandler : IRequestHandler<AddContactCommand, IDataResult<Contact>>
     {
         private readonly IContactRepository _contactRepository;
         private readonly IMapper _mapper;
@@ -21,18 +21,18 @@ namespace Application.Features.Handlers.Commands.ContactHandlers
             _contactRepository = contactRepository;
             _mapper = mapper;
         }
-        public async Task<IDataResult<ContactDto>> Handle(AddContactCommand request, CancellationToken cancellationToken)
+        public async Task<IDataResult<Contact>> Handle(AddContactCommand request, CancellationToken cancellationToken)
         {
             try
             {
                 var mapped = _mapper.Map<Contact>(request.Contact);
-                await _contactRepository.AddAsync(mapped);
-                return new SuccessDataResult<ContactDto>(request.Contact, Messages.Success_Added);
+                var result = await _contactRepository.AddAsync(mapped);
+                return new SuccessDataResult<Contact>(result, Messages.Success_Added);
 
             }
             catch (Exception ex)
             {
-                return new ErrorDataResult<ContactDto>(request.Contact, ex.Message);
+                return new ErrorDataResult<Contact>(ex.Message);
             }
         }
     }
