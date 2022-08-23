@@ -24,9 +24,10 @@ namespace Persistence.Repositories
             return await _collection.Find(s => s.IsDeleted == false).ToListAsync();
         }
 
-        public virtual async Task AddAsync(T entity)
+        public virtual async Task<T> AddAsync(T entity)
         {
             await _collection.InsertOneAsync(entity);
+            return entity;
         }
 
         public virtual async Task AddRangeAsync(ICollection<T> entities)

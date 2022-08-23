@@ -12,7 +12,7 @@ namespace Application.Interfaces.Repository
         Task<T> GetAsync(Expression<Func<T, bool>> where);
         Task<T> GetByIdAsync(string id);
         Task<ICollection<T>> GetListAsync();
-        Task AddAsync(T entity);
+        Task<T> AddAsync(T entity);
         Task AddRangeAsync(ICollection<T> entities);
         Task UpdateAsync(T entity);
         Task UpdateRangeAsync(ICollection<T> entities);
