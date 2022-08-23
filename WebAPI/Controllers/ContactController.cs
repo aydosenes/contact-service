@@ -24,7 +24,7 @@ namespace WebAPI.Controllers
         }
         [HttpGet("contact/{id}")]
         [ProducesResponseType(200, Type = typeof(IDataResult<List<ContactDto>>))]
-        public async Task<IActionResult> TestById(string id)
+        public async Task<IActionResult> ContactById(string id)
         {
             var result = await _mediator.Send(new GetContactByIdQuery() { Id = id });
             if (result.Success)
@@ -35,7 +35,7 @@ namespace WebAPI.Controllers
 
         [HttpGet("contact-list")]
         [ProducesResponseType(200, Type = typeof(IDataResult<List<ContactDto>>))]
-        public async Task<IActionResult> TestList()
+        public async Task<IActionResult> ContactList()
         {
             var result = await _mediator.Send(new GetContactListQuery());
             if (result.Success)
@@ -44,9 +44,14 @@ namespace WebAPI.Controllers
 
         }
 
+        /// <summary>
+        /// Adds a new contact.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost("add-contact")]
         [ProducesResponseType(200, Type = typeof(BaseResult))]
-        public async Task<IActionResult> AddTest(AddContactCommand request)
+        public async Task<IActionResult> AddContact([FromBody] AddContactCommand request)
         {
             var result = await _mediator.Send(request);
             if (result.Success)
@@ -56,7 +61,7 @@ namespace WebAPI.Controllers
 
         [HttpPut("update-contact")]
         [ProducesResponseType(200, Type = typeof(BaseResult))]
-        public async Task<IActionResult> UpdateTest(UpdateContactCommand request)
+        public async Task<IActionResult> UpdateContact([FromBody] UpdateContactCommand request)
         {
             var result = await _mediator.Send(request);
             if (result.Success)
@@ -67,7 +72,7 @@ namespace WebAPI.Controllers
 
         [HttpDelete("delete-contact")]
         [ProducesResponseType(200, Type = typeof(BaseResult))]
-        public async Task<IActionResult> DeleteTest(DeleteContactCommand request)
+        public async Task<IActionResult> DeleteContact([FromBody] DeleteContactCommand request)
         {
             var result = await _mediator.Send(request);
             if (result.Success)

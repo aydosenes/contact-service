@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using Persistence.Context;
 using Persistence.DbContexTools;
 using Persistence.Repositories;
 using System;
@@ -27,14 +26,13 @@ namespace WebAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.Configure<DbSetting>(Configuration.GetSection("DbSettings"));
-            services.AddSingleton<IDbSetting>(option =>
-            {
-                return option.GetRequiredService<IOptions<DbSetting>>().Value;
-            });
-
             services.AddScoped<IContactRepository, ContactRepository>();
+            services.AddMongoDbSettings(Configuration);
+            //services.Configure<DbSetting>(Configuration.GetSection("DbSettings"));
+            //services.AddSingleton<IDbSetting>(option =>
+            //{
+            //    return option.GetRequiredService<IOptions<DbSetting>>().Value;
+            //});
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
@@ -42,6 +40,7 @@ namespace WebAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Contact Microservice", Version = "v1" });
             });
+            services.AddMemoryCache();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

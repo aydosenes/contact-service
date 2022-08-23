@@ -24,7 +24,8 @@ namespace Application.Features.Handlers.Commands.ContactHandlers
         {
             try
             {
-                await _contactRepository.AddAsync(_mapper.Map<Contact>(request));
+                var mapped = _mapper.Map<Contact>(request.Contact);
+                await _contactRepository.AddAsync(mapped);
                 return new SuccessDataResult<Contact>(Messages.Success_Added);
 
             }

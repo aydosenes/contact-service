@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces.Repository;
 using Domain.Entities;
+using Microsoft.Extensions.Options;
 using Persistence.DbContexTools;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace Persistence.Repositories
 {
     public class ContactRepository : BaseMongoRepository<Contact>, IContactRepository
     {
-        public ContactRepository(DbSetting dbSetting) : base(dbSetting, "Contacts")
+        public ContactRepository(IOptions<DbSetting> options) : base(options, "Contacts")
         {
 
         }

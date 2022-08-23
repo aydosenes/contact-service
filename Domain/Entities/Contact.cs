@@ -7,7 +7,7 @@ namespace Domain.Entities
 {
     public class Contact : BaseEntity
     {
-        public Guid UUID { get; set; }
+        public Guid UUID { get; set; } = Guid.NewGuid();
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Company { get; set; }

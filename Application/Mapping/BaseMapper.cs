@@ -15,11 +15,7 @@ namespace Application.Mapping
         {
             CreateMap<Contact, ContactDto>().ReverseMap();
 
-            CreateMap<Contact, AddContactCommand>().ReverseMap();
-
-            CreateMap<Contact, DeleteContactCommand>().ReverseMap();
-
-            CreateMap<Contact, UpdateContactCommand>().ReverseMap();
+            CreateMap<ContactDetail, ContactDetailDto>().ReverseMap();
 
         }
     }

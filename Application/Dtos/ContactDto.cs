@@ -9,8 +9,6 @@ namespace Application.Dtos
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Company { get; set; }
-        public int Phone { get; set; }
-        public string Email { get; set; }
-        public string Location { get; set; }
+        public ContactDetailDto ContactDetail { get; set; }
     }
 }
