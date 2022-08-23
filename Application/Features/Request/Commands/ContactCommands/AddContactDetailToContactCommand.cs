@@ -7,6 +7,6 @@ namespace Application.Features.Request.Commands.ContactCommands
 {
     public class AddContactDetailToContactCommand : IRequest<IDataResult<Contact>>
     {
-        public ContactIdAndContactDetailIdPairDto ContactIdAndContactDetailIdPairDto { get; set; }
+        public ContactWithContactDetailDto ContactIdAndContactDetailIdPairDto { get; set; }
     }
 }

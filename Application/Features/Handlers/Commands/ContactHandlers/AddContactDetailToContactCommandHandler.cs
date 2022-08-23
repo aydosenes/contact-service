@@ -14,18 +14,29 @@ namespace Application.Features.Handlers.Commands.ContactHandlers
     public class AddContactDetailToContactCommandHandler : IRequestHandler<AddContactDetailToContactCommand, IDataResult<Contact>>
     {
         private readonly IContactRepository _contactRepository;
+        private readonly IContactDetailRepository _contactDetailRepository;
         private readonly IMapper _mapper;
-        public AddContactDetailToContactCommandHandler(IContactRepository contactRepository, IMapper mapper)
+        public AddContactDetailToContactCommandHandler(IContactRepository contactRepository, IMapper mapper, IContactDetailRepository contactDetailRepository)
         {
             _contactRepository = contactRepository;
             _mapper = mapper;
+            _contactDetailRepository = contactDetailRepository;
         }
         public async Task<IDataResult<Contact>> Handle(AddContactDetailToContactCommand request, CancellationToken cancellationToken)
         {
             try
             {
                 var contact = await _contactRepository.GetByIdAsync(request.ContactIdAndContactDetailIdPairDto.ContactId);
-                contact.ContactDetailIdList.Add(request.ContactIdAndContactDetailIdPairDto.ContactDetailId);
+                if (request.ContactIdAndContactDetailIdPairDto.ContactDetailId is null)
+                {
+                    var mapped = _mapper.Map<ContactDetail>(request.ContactIdAndContactDetailIdPairDto.ContactDetail);
+                    var detail = await _contactDetailRepository.AddAsync(mapped);
+                    contact.ContactDetailIdList.Add(detail.Id);
+                }
+                else
+                {
+                    contact.ContactDetailIdList.Add(request.ContactIdAndContactDetailIdPairDto.ContactDetailId);
+                }                
                 var result = await _contactRepository.UpdateAsync(contact);
                 return new SuccessDataResult<Contact>(result, Messages.Success_Added);
 

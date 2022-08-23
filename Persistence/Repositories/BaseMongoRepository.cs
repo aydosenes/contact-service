@@ -24,6 +24,11 @@ namespace Persistence.Repositories
             return await _collection.Find(s => s.IsDeleted == false).ToListAsync();
         }
 
+        public virtual async Task<ICollection<T>> GetListAsync(Expression<Func<T, bool>> where)
+        {
+            return await _collection.Find(where).ToListAsync();
+        }
+
         public virtual async Task<T> AddAsync(T entity)
         {
             await _collection.InsertOneAsync(entity);
