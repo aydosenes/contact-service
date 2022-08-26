@@ -1,12 +1,13 @@
 using Application.Mapping;
 using Application.Middlewares;
+using MassTransit;
+using MassTransit.MultiBus;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System;
 
@@ -23,13 +24,38 @@ namespace WebAPI
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddScoped<IContactRepository, ContactRepository>();
-            //services.AddMongoDbSettings(Configuration);
-            //services.Configure<DbSetting>(Configuration.GetSection("DbSettings"));
-            //services.AddSingleton<IDbSetting>(option =>
+            services.AddMassTransit(x =>
+            {
+                x.UsingRabbitMq((context, config) =>
+                {
+                    config.Host(Configuration["RabbitMQUrl"], "/", host => {
+                        host.Username("guest");
+                        host.Password("guest");
+                    });
+                });            
+            });
+            services.AddOptions<MassTransitHostOptions>()
+                .Configure(options =>
+                {
+                    // if specified, waits until the bus is started before
+                    // returning from IHostedService.StartAsync
+                    // default is false
+                    options.WaitUntilStarted = true;
+
+                    // if specified, limits the wait time when starting the bus
+                    options.StartTimeout = TimeSpan.FromSeconds(10);
+
+                    // if specified, limits the wait time when stopping the bus
+                    options.StopTimeout = TimeSpan.FromSeconds(30);
+                });
+
+            //services.Configure<MassTransitHostOptions>(options =>
             //{
-            //    return option.GetRequiredService<IOptions<DbSetting>>().Value;
+            //    options.WaitUntilStarted = true;
+            //    options.StartTimeout = TimeSpan.FromSeconds(30);
+            //    options.StopTimeout = TimeSpan.FromMinutes(1);
             //});
+
             services.AddAutoMapper(typeof(BaseMapper));
             services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
