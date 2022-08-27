@@ -54,6 +54,16 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
+        [HttpPost("add-contact-with-detail")]
+        [ProducesResponseType(200, Type = typeof(BaseResult))]
+        public async Task<IActionResult> AddContactWithDetail([FromBody] AddContactWithDetailCommand request)
+        {
+            var result = await _mediator.Send(request);
+            if (result.Success)
+                return Ok(result);
+            return BadRequest(result.Message);
+        }
+
         [HttpPut("update-contact")]
         [ProducesResponseType(200, Type = typeof(BaseResult))]
         public async Task<IActionResult> UpdateContact([FromBody] UpdateContactCommand request)
