@@ -35,8 +35,13 @@ namespace Application.Features.Handlers.Commands.ContactHandlers
                     mappedContact.ContactDetailIdList.Add(item.Id);
                 }
                 var contact = await _contactRepository.AddAsync(mappedContact);
+                foreach (var d in mappedContactDetail)
+                {
+                    d.ContactId = contact.Id;
+                }
+                var updatedDetail = await _contactDetailRepository.UpdateRangeAsync(mappedContactDetail);
                 var contactDto = _mapper.Map<ContactDto>(contact);
-                var detailDto = _mapper.Map<List<ContactDetailDto>>(detail);
+                var detailDto = _mapper.Map<List<ContactDetailDto>>(updatedDetail);
 
                 return new SuccessDataResult<ContactWithContactDetailListDto>(new ContactWithContactDetailListDto() { Contact = contactDto, ContactDetailList = detailDto }, Messages.Success_Added);
             }

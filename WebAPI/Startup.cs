@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Persistence.Consumers;
 using System;
 
 namespace WebAPI
@@ -26,11 +27,16 @@ namespace WebAPI
         {
             services.AddMassTransit(x =>
             {
+                x.AddConsumer<ReportMessageConsumer>();
                 x.UsingRabbitMq((context, config) =>
                 {
                     config.Host(Configuration["RabbitMQUrl"], "/", host => {
                         host.Username("guest");
                         host.Password("guest");
+                    });
+
+                    config.ReceiveEndpoint("contact-service", e=> {
+                        e.ConfigureConsumer<ReportMessageConsumer>(context);                        
                     });
                 });            
             });

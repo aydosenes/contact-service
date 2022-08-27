@@ -14,11 +14,13 @@ namespace Application.Features.Handlers.Commands.ContactHandlers
     public class DeleteContactDetailFromContactCommandHandler : IRequestHandler<DeleteContactDetailFromContactCommand, IDataResult<Contact>>
     {
         private readonly IContactRepository _contactRepository;
+        private readonly IContactDetailRepository _contactDetailRepository;
         private readonly IMapper _mapper;
-        public DeleteContactDetailFromContactCommandHandler(IContactRepository contactRepository, IMapper mapper)
+        public DeleteContactDetailFromContactCommandHandler(IContactRepository contactRepository, IMapper mapper, IContactDetailRepository contactDetailRepository)
         {
             _contactRepository = contactRepository;
             _mapper = mapper;
+            _contactDetailRepository = contactDetailRepository;
         }
         public async Task<IDataResult<Contact>> Handle(DeleteContactDetailFromContactCommand request, CancellationToken cancellationToken)
         {
@@ -26,6 +28,9 @@ namespace Application.Features.Handlers.Commands.ContactHandlers
             {
                 var contact = await _contactRepository.GetByIdAsync(request.ContactId);
                 contact.ContactDetailIdList.Remove(request.ContactDetailId);
+                var detail = await _contactDetailRepository.GetByIdAsync(request.ContactDetailId);
+                detail.ContactId = string.Empty;
+                var updatedDetail = await _contactDetailRepository.UpdateAsync(detail);
                 var result = await _contactRepository.UpdateAsync(contact);
                 return new SuccessDataResult<Contact>(result, Messages.Success_Deleted);
             }

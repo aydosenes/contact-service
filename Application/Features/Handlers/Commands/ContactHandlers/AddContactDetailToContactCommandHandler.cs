@@ -26,16 +26,20 @@ namespace Application.Features.Handlers.Commands.ContactHandlers
         {
             try
             {
-                var contact = await _contactRepository.GetByIdAsync(request.ContactIdAndContactDetailIdPairDto.ContactId);
-                if (request.ContactIdAndContactDetailIdPairDto.ContactDetailId is null)
+                var contact = await _contactRepository.GetByIdAsync(request.ContactWithContactDetailDto.ContactId);
+                if (request.ContactWithContactDetailDto.ContactDetailId is null)
                 {
-                    var mapped = _mapper.Map<ContactDetail>(request.ContactIdAndContactDetailIdPairDto.ContactDetail);
+                    var mapped = _mapper.Map<ContactDetail>(request.ContactWithContactDetailDto.ContactDetail);
+                    mapped.ContactId = contact.Id;
                     var detail = await _contactDetailRepository.AddAsync(mapped);
                     contact.ContactDetailIdList.Add(detail.Id);
                 }
                 else
                 {
-                    contact.ContactDetailIdList.Add(request.ContactIdAndContactDetailIdPairDto.ContactDetailId);
+                    var detail = await _contactDetailRepository.GetByIdAsync(request.ContactWithContactDetailDto.ContactDetailId);
+                    detail.ContactId = contact.Id;
+                    var update = await _contactDetailRepository.UpdateAsync(detail);
+                    contact.ContactDetailIdList.Add(request.ContactWithContactDetailDto.ContactDetailId);
                 }                
                 var result = await _contactRepository.UpdateAsync(contact);
                 return new SuccessDataResult<Contact>(result, Messages.Success_Added);

@@ -105,7 +105,7 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("contact-list-with-contact-details")]
+        [HttpPost("contact-with-contact-details")]
         [ProducesResponseType(200, Type = typeof(IDataResult<List<ContactWithContactDetailListDto>>))]
         public async Task<IActionResult> ContactWithContactDetails([FromBody] GetContactWithContactDetailListQuery request)
         {
@@ -113,7 +113,16 @@ namespace WebAPI.Controllers
             if (result.Success)
                 return Ok(result.Data);
             return BadRequest(result.Message);
+        }
 
+        [HttpPost("contact-list-with-contact-details")]
+        [ProducesResponseType(200, Type = typeof(IDataResult<List<ContactWithContactDetailListDto>>))]
+        public async Task<IActionResult> ContactListWithContactDetails()
+        {
+            var result = await _mediator.Send(new GetReportQuery());
+            if (result.Success)
+                return Ok(result.Data);
+            return BadRequest(result.Message);
         }
     }
 }
