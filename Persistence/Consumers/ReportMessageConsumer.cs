@@ -41,7 +41,7 @@ namespace Persistence.Consumers
                         Location = groupedDetail.Key,
                         PhoneCount = groupedDetail.Count(),
                         ContactCount = groupedDetail.Select(s => s.ContactId).Distinct().ToList().Count,
-                        State = Enums.State.InProgress
+                        State = Enums.State.Completed
                     });
                 }
                 await _restService.Post(url, new AddRangeReportCommand() { Report = reportList });
