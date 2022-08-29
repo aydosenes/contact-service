@@ -54,16 +54,6 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("add-contact-with-detail")]
-        [ProducesResponseType(200, Type = typeof(BaseResult))]
-        public async Task<IActionResult> AddContactWithDetail([FromBody] AddContactWithDetailCommand request)
-        {
-            var result = await _mediator.Send(request);
-            if (result.Success)
-                return Ok(result);
-            return BadRequest(result.Message);
-        }
-
         [HttpPut("update-contact")]
         [ProducesResponseType(200, Type = typeof(BaseResult))]
         public async Task<IActionResult> UpdateContact([FromBody] UpdateContactCommand request)
@@ -105,7 +95,7 @@ namespace WebAPI.Controllers
             return BadRequest(result.Message);
         }
 
-        [HttpPost("contact-with-contact-details")]
+        [HttpPost("contact-list-with-contact-details")]
         [ProducesResponseType(200, Type = typeof(IDataResult<List<ContactWithContactDetailListDto>>))]
         public async Task<IActionResult> ContactWithContactDetails([FromBody] GetContactWithContactDetailListQuery request)
         {
@@ -113,15 +103,16 @@ namespace WebAPI.Controllers
             if (result.Success)
                 return Ok(result.Data);
             return BadRequest(result.Message);
+
         }
 
-        [HttpPost("contact-list-with-contact-details")]
-        [ProducesResponseType(200, Type = typeof(IDataResult<List<ContactWithContactDetailListDto>>))]
-        public async Task<IActionResult> ContactListWithContactDetails()
+        [HttpPost("add-contact-with-detail")]
+        [ProducesResponseType(200, Type = typeof(BaseResult))]
+        public async Task<IActionResult> AddContactWithDetail([FromBody] AddContactWithDetailCommand request)
         {
-            var result = await _mediator.Send(new GetReportQuery());
+            var result = await _mediator.Send(request);
             if (result.Success)
-                return Ok(result.Data);
+                return Ok(result);
             return BadRequest(result.Message);
         }
     }

@@ -8,7 +8,6 @@ using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Persistence.Consumers
@@ -26,25 +25,34 @@ namespace Persistence.Consumers
         }
         public async Task Consume(ConsumeContext<GetContactListWithContactDetailListQuery> context)
         {
-            var result = await _mediator.Send(new GetReportQuery() { GetContactListWithContactDetailListQuery = context.Message });
-            if (result.Success)
+            try
             {
-                var url = "http://localhost:5000/report-service/report/add-range-report";
-
-                var reportList = new List<ReportDto>();
-                var dto = result.Data.ContactWithContactDetailListDto;
-                var groupedDetailList = dto.SelectMany(s => s.ContactDetailList).GroupBy(g => g.Location.Trim().ToLower()).ToList();
-                foreach (var groupedDetail in groupedDetailList)
+                var result = await _mediator.Send(new GetReportQuery() { GetContactListWithContactDetailListQuery = context.Message });
+                if (result.Success)
                 {
-                    reportList.Add(new ReportDto()
+                    var url = "http://localhost:5000/report-service/report/add-range-report";
+                    var uuid = context.Message.UUID;
+                    var reportList = new List<ReportDto>();
+                    var dto = result.Data.ContactWithContactDetailListDto;
+                    var groupedDetailList = dto.SelectMany(s => s.ContactDetailList).GroupBy(g => g.Location.Trim().ToLower()).ToList();
+                    foreach (var groupedDetail in groupedDetailList)
                     {
-                        Location = groupedDetail.Key,
-                        PhoneCount = groupedDetail.Count(),
-                        ContactCount = groupedDetail.Select(s => s.ContactId).Distinct().ToList().Count,
-                        State = Enums.State.Completed
-                    });
+                        reportList.Add(new ReportDto()
+                        {
+                            Location = groupedDetail.Key,
+                            PhoneCount = groupedDetail.Count(),
+                            ContactCount = groupedDetail.Select(s => s.ContactId).Distinct().ToList().Count,
+                            State = Enums.State.Completed
+                        });
+                    }                    
+                    _restService.Post(url, new AddRangeReportCommand() { Report = reportList }).Wait();
                 }
-                await _restService.Post(url, new AddRangeReportCommand() { Report = reportList });
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
             }
         }
     }
