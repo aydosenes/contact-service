@@ -1,5 +1,4 @@
 using Application.Dtos;
-using Application.Features.Request.Commands;
 using Application.Mapping;
 using Application.Middlewares;
 using Domain.Common;
@@ -7,11 +6,9 @@ using MassTransit;
 using MassTransit.MultiBus;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
